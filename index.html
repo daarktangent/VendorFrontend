@@ -9,13 +9,25 @@
 <body>
     <h1>Vendor Management System</h1>
 
-    <ul id="vendor-list">
-        <!-- Vendor list items will be added here dynamically -->
-    </ul>
+    <table id="vendor-list">
+        <thead>
+            <tr>
+                <th>Vendor Name</th>
+                <th>Bank Account No.</th>
+                <th>Bank Name</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Vendor list rows will be added here dynamically -->
+        </tbody>
+    </table>
     <div id="pagination">
         <button id="prev-page">Previous</button>
         <button id="next-page">Next</button>
     </div>
+    
 
     <div class="vendor-form">
         <h2>Add a Vendor</h2>
