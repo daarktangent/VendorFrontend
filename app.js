@@ -152,7 +152,7 @@ document.getElementById('next-page').addEventListener('click', () => {
 
 // Function to handle editing a vendor
 function editVendor(id) {
-    // Fetch the vendor details by id from your backend API
+
     let apiUrl = `https://vendorbackend-production.up.railway.app/${id}`;
 
     fetch(apiUrl, {
@@ -177,17 +177,15 @@ function editVendor(id) {
         document.getElementById('country').value = data.country;
         document.getElementById('zipCode').value = data.zipCode;
 
-
         const updateButton = document.getElementById('update-vendor-button');
         updateButton.style.display = 'block';
         const addButton = document.querySelector('#add-vendor-form button[type="submit"]');
         addButton.style.display = 'none';
 
-
-        updateButton.removeEventListener('click', updateVendor);
-
-
         function updateVendor() {
+                    // Remove previous event listener if it exists multiple recors were getting updated instead of one
+            updateButton.removeEventListener('click', updateVendor);
+            console.log("update called" + id);
             const updatedData = {
                 vendorName: document.getElementById('vendorName').value,
                 bankAccountNo: document.getElementById('bankAccountNo').value,
@@ -225,13 +223,17 @@ function editVendor(id) {
             });
         }
 
-        // Add an event listener for the update button
+
+      
+
+        // Add the updated event listener
         updateButton.addEventListener('click', updateVendor);
     })
     .catch(error => {
         console.log(error);
     });
 };
+
 
 
 // Initial load of the first page
