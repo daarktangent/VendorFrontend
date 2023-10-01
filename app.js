@@ -15,7 +15,7 @@ function initializePage() {
             zipCode: document.getElementById('zipCode').value,
         };
 
-        fetch('http://localhost:8080/add', {
+        fetch('https://vendorbackend-production.up.railway.app/add  ', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ let currentPage = 0;
 
 function loadVendors(page) {
   
-    const apiUrl = `http://localhost:8080/page?page=${page}&size=5`; 
+    const apiUrl = `https://vendorbackend-production.up.railway.app/page?page=${page}&size=5`; 
 
     fetch(apiUrl, {
         method: 'GET',
@@ -56,7 +56,6 @@ function loadVendors(page) {
 
     .then(data => {
         const pageNumberSpan = document.getElementById('page-number');
-        
         const vendorTable = document.getElementById('vendor-list').getElementsByTagName('tbody')[0];
         const updateButton = document.getElementById('update-vendor-button');
         updateButton.style.display='none';
@@ -106,7 +105,7 @@ function deleteVendor(id) {
     const confirmDelete = confirm('Are you sure you want to delete this vendor?');
     
     if (confirmDelete) {
-        const apiUrl = `http://localhost:8080/delete/${id}`;
+        const apiUrl = `https://vendorbackend-production.up.railway.app/delete/${id}`;
 
         fetch(apiUrl, {
             method: 'DELETE',
@@ -153,8 +152,8 @@ document.getElementById('next-page').addEventListener('click', () => {
 
 // Function to handle editing a vendor
 function editVendor(id) {
-    // Fetch the vendor details by id backend
-    const apiUrl = `http://localhost:8080/${id}`; 
+    // Fetch the vendor details by id from your backend API
+    let apiUrl = `https://vendorbackend-production.up.railway.app/${id}`;
 
     fetch(apiUrl, {
         method: 'GET',
@@ -167,6 +166,7 @@ function editVendor(id) {
         return response.json();
     })
     .then(data => {
+        console.log(data);
         // Populate the form with the vendor details for editing
         document.getElementById('vendorName').value = data.vendorName;
         document.getElementById('bankAccountNo').value = data.bankAccountNo;
@@ -177,15 +177,17 @@ function editVendor(id) {
         document.getElementById('country').value = data.country;
         document.getElementById('zipCode').value = data.zipCode;
 
-        // Modify the update button text and show it
+
         const updateButton = document.getElementById('update-vendor-button');
         updateButton.style.display = 'block';
         const addButton = document.querySelector('#add-vendor-form button[type="submit"]');
         addButton.style.display = 'none';
 
-        // Add an event listener for the update button
-        updateButton.addEventListener('click', () => {
-            // Create a JSON object with the updated data
+
+        updateButton.removeEventListener('click', updateVendor);
+
+
+        function updateVendor() {
             const updatedData = {
                 vendorName: document.getElementById('vendorName').value,
                 bankAccountNo: document.getElementById('bankAccountNo').value,
@@ -211,7 +213,7 @@ function editVendor(id) {
                     throw new Error('Network response was not ok');
                 }
             })
-            .then(data => {
+            .then(() => {
                 // After updating, reset the form and change the button text back to 'Add Vendor'
                 document.getElementById('add-vendor-form').reset();
                 updateButton.style.display = 'none';
@@ -221,14 +223,15 @@ function editVendor(id) {
             .catch(error => {
                 console.log(error);
             });
-        });
+        }
+
+        // Add an event listener for the update button
+        updateButton.addEventListener('click', updateVendor);
     })
     .catch(error => {
         console.log(error);
     });
-}
-
-
+};
 
 
 // Initial load of the first page
